@@ -5,6 +5,17 @@
 
 /**
  * Computes the sum of three bits.
+                    HA(bc)      a   HA(a,su1)   OR(cy1,cy2)     Expected
+    a   b   c       su1 cy1         su2 cy2                     su  cy
+    0   0   0       0   0       0   0   0       0               0   0
+    0   0   1       1   0       0   1   0       0               1   0
+    0   1   0       1   0       0   1   0       0               1   0
+    0   1   1       0   1       0   0   0       1               0   1
+    1   0   0       0   0       1   1   0       0               1   0
+    1   0   1       1   0       1   0   1       1               0   1
+    1   1   0       1   0       1   0   1       1               0   1
+    1   1   1       0   1       1   1   0       1               1   1
+                                    ^           ^
  */
 
 CHIP FullAdder {
@@ -13,5 +24,7 @@ CHIP FullAdder {
         carry;   // Left bit of a + b + c
 
     PARTS:
-    // Put you code here:
+    HalfAdder(a=b, b=c, sum=sum1, carry=carry1);
+    HalfAdder(a=a, b=sum1, sum=sum, carry=carry2);
+    Or(a=carry1, b=carry2, out=carry);
 }
